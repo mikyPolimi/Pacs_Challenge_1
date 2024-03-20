@@ -1,6 +1,9 @@
 # Ignore the main executable
 main
 
+# ignore main.o object
+main.o
+
 # Ignore all files in the obj directory
 obj/
 
