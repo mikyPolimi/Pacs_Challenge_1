@@ -2,15 +2,25 @@
 #include <cmath>
 #include <functional>
 
-using real = double;
-using vector = std::vector<real>;
+using Real = double;
+using Vector = std::vector<Real>;
 
 struct parameters{
-    int max_iter = 1000;
+  int max_iter = 1000;
+  Real eps_r = 1e-6;
+  Real eps_s = 1e-6;
+
+    // initial values
+    Vector x0 = {0,0};
+    Real alpha_0 = 0.1;
+
+  // exponential decay
+  Real mu = 0.2;
+
 };
 
 
-real function(const vector & x){
+Real function(const Vector & x){
   /** @brief Function to be minimized
    *  @param x: vector of variables
    *  @return value of the function
@@ -20,12 +30,12 @@ real function(const vector & x){
 }
 
 
-vector gradient(const vector & x){
+Vector gradient(const Vector & x){
   /** @brief Gradient of the function to be minimized
    *  @param x: vector of variables
    *  @return gradient of the function
    */
-  vector grad(x.size());
+  Vector grad(x.size());
   grad[0] = x[1] + 16*std::pow(x[0], 3) + 3;
   grad[1] = x[0] + 2*x[1];
 
