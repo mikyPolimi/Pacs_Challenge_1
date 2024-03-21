@@ -62,12 +62,13 @@ Vector sum(const Vector & x1, const Vector & x2){
 };
 
 
-void print_result(Vector & x,const function_wrapper& f, int k, bool convergence){
+void print_result(Vector & x,const function_wrapper& f, int k, bool convergence,Real alpha){
   std::cout << "number iterations: " << k << std::endl;
   std::cout << "argmin is equal to" << std::endl;
   for(auto& i : x)
     std::cout << i << std::endl;
   std::cout << "The function evaluated in that point is: " << f(x) << std::endl;
+  std::cout << "alpha: " << alpha << std::endl;
   return;
 }
 
@@ -88,11 +89,11 @@ Vector compute_minimum(const parameters& p, const function_wrapper& f, const gra
     // find alpha
     
     // exponential decay
-    //alpha = p.alpha_0*std::exp(-p.mu*k);
+    alpha = p.alpha_0*std::exp(-p.mu*k);
     
     // Inverse Decay
    // alpha = p.alpha_0 / ( 1 + p.mu * k );
-    
+    /*
     // Armijo rule
     alpha = p.alpha_0;
     bool armijio_condition = false;
@@ -101,7 +102,7 @@ Vector compute_minimum(const parameters& p, const function_wrapper& f, const gra
       armijio_condition = f(x_old) - f(subtraction(x_old, scalar_vector(alpha,grad_k) )) >= p.sigma*alpha*norm(grad_k)*norm(grad_k);
       alpha /= 2;
     }
-
+*/
 
     // x_{k+1} = x_{k} - alpha_{k} * grad(f(x_{k}))
     x_new = subtraction(x_old,scalar_vector(alpha, grad_k));
@@ -121,7 +122,7 @@ Vector compute_minimum(const parameters& p, const function_wrapper& f, const gra
     x_old = x_new;
 
   }
-  print_result(x_new,f,k,convergence);
+  print_result(x_new,f,k,convergence,alpha);
   return x_new;
 
 }
