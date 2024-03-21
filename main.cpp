@@ -81,31 +81,32 @@ enum class Method { Exponential, Inverse, Armijo };
 
 // Function template with a method enum as a template parameter
 template<Method M>
-double compute_alpha() {
+Real compute_alpha(const parameters& p, int k) {
     if constexpr (M == Method::Exponential)
-        return 0.1; // Placeholder value for exponential method
+     // exponential decay
+        return p.alpha_0*std::exp(-p.mu*k);
     else if constexpr (M == Method::Inverse)
-        return 0.5; // Placeholder value for inverse method
+        return p.alpha_0 / ( 1 + p.mu * k ); // Inverse Decay
     else if constexpr (M == Method::Armijo)
-        return 0.8; // Placeholder value for Armijo method
+      // Armijo rule
+    alpha = p.alpha_0;
+    bool armijio_condition = false;
+    while(!armijio_condition){
+
+      armijio_condition = f(x_old) - f(subtraction(x_old, scalar_vector(alpha,grad_k) )) >= p.sigma*alpha*norm(grad_k)*norm(grad_k);
+      alpha /= 2;
+    }
+        return alpha; 
     else {
         std::cerr << "Unknown method" << std::endl;
         return 0.0;
     }
 }
 
-int main() {
-    // Call the function template with different optimization methods
-    std::cout << "Alpha for Exponential method: " << compute_alpha<Method::Exponential>() << std::endl;
-    std::cout << "Alpha for Inverse method: " << compute_alpha<Method::Inverse>() << std::endl;
-    std::cout << "Alpha for Armijo method: " << compute_alpha<Method::Armijo>() << std::endl;
-
-    return 0;
-}
 
 // compute minimum
 
-Vector compute_minimum(const parameters& p, const function_wrapper& f, const gradient_wrapper& grad){
+Vector compute_minimum(const parameters& p, const function_wrapper& f, const gradient_wrapper& grad, Method M){
   Real alpha = p.alpha_0;
   Vector x_old = p.x0;
   Vector x_new(x_old.size());
@@ -118,20 +119,11 @@ Vector compute_minimum(const parameters& p, const function_wrapper& f, const gra
 
     // find alpha
     
-    // exponential decay
-    alpha = p.alpha_0*std::exp(-p.mu*k);
+   alpha = compute_alpha<M>(p, k);
     
-    // Inverse Decay
-   // alpha = p.alpha_0 / ( 1 + p.mu * k );
+   
     /*
-    // Armijo rule
-    alpha = p.alpha_0;
-    bool armijio_condition = false;
-    while(!armijio_condition){
-
-      armijio_condition = f(x_old) - f(subtraction(x_old, scalar_vector(alpha,grad_k) )) >= p.sigma*alpha*norm(grad_k)*norm(grad_k);
-      alpha /= 2;
-    }
+  
 */
 
     // x_{k+1} = x_{k} - alpha_{k} * grad(f(x_{k}))
@@ -168,7 +160,12 @@ int main (){
     function_wrapper f(function_);
     gradient_wrapper grad(gradient_);
 
-    Vector min = compute_minimum(p,f,grad);
+    Method M = Method::Exponential;
+    // Call the function template with different optimization methods
+    std::cout << "Alpha for Exponential method: " << compute_alpha<Method::Exponential>() << std::endl;
+    std::cout << "Alpha for Inverse method: " << compute_alpha<Method::Inverse>() << std::endl;
+    std::cout << "Alpha for Armijo method: " << compute_alpha<Method::Armijo>() << std::endl;
+    Vector min = compute_minimum(p,f,grad,M);
 
     return 0;
 }
