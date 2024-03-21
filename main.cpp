@@ -73,6 +73,36 @@ void print_result(Vector & x,const function_wrapper& f, int k, bool convergence,
 }
 
 
+
+// function template
+
+// Define an enumeration for different optimization methods
+enum class Method { Exponential, Inverse, Armijo };
+
+// Function template with a method enum as a template parameter
+template<Method M>
+double compute_alpha() {
+    if constexpr (M == Method::Exponential)
+        return 0.1; // Placeholder value for exponential method
+    else if constexpr (M == Method::Inverse)
+        return 0.5; // Placeholder value for inverse method
+    else if constexpr (M == Method::Armijo)
+        return 0.8; // Placeholder value for Armijo method
+    else {
+        std::cerr << "Unknown method" << std::endl;
+        return 0.0;
+    }
+}
+
+int main() {
+    // Call the function template with different optimization methods
+    std::cout << "Alpha for Exponential method: " << compute_alpha<Method::Exponential>() << std::endl;
+    std::cout << "Alpha for Inverse method: " << compute_alpha<Method::Inverse>() << std::endl;
+    std::cout << "Alpha for Armijo method: " << compute_alpha<Method::Armijo>() << std::endl;
+
+    return 0;
+}
+
 // compute minimum
 
 Vector compute_minimum(const parameters& p, const function_wrapper& f, const gradient_wrapper& grad){
@@ -131,7 +161,6 @@ Vector compute_minimum(const parameters& p, const function_wrapper& f, const gra
 
 int main (){
 
-    std::cout<<"hello world"<<std::endl;
     parameters p;
     Vector x = p.x0;
 
