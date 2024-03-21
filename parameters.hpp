@@ -27,7 +27,7 @@ struct parameters{
 
 
 Real function_(const Vector & x){
-  /** @brief Function to be minimized
+  /* @brief Function to be minimized
    *  @param x: vector of variables
    *  @return value of the function
    */
