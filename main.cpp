@@ -14,7 +14,7 @@ struct function_wrapper{
 struct gradient_wrapper{
     std::function<Vector(const Vector&)> grad;
     gradient_wrapper(std::function<Vector(const Vector&)> g): grad(g){};
-    Vector operator()(const Vector& x){
+    Vector operator()(const Vector& x) const{
         return grad(x);
     }
 };
@@ -27,11 +27,11 @@ Real norm(const Vector& x){
 
 };
 
-Vector Vector_scalar(Vector& x, const Real alpha){
+Vector scalar_vector( const Real alpha, Vector& x){
   // Scalar * vector
   // @param x: vector
   //  @param alpha: scalar
-  Vector y(x.size());
+  Vector y(x);
   for(auto & i : y)
     i *= alpha;
   return y;
@@ -64,8 +64,17 @@ Vector sum(const Vector & x1, const Vector & x2){
 
 // compute minimum
 
-Real compute_minimum(const parameters& p, const function_wrapper& f, const gradient_wrapper& df){
+Real compute_minimum(const parameters& p, const function_wrapper& f, const gradient_wrapper& grad){
     Real alpha = p.alpha_0;
+    Vector x_old = p.x0;
+    Vector x_new(x_old.size());
+    bool convergence = false;
+    int n = 0;
+    while (!convergence and n < p.max_iter){
+      Vector v = grad(x_old);
+      x_new = subtraction(x_old,scalar_vector(alpha, v));
+    }
+
 }
 
 
