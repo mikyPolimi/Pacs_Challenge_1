@@ -14,8 +14,14 @@ struct parameters{
     Vector x0 = {0,0};
     Real alpha_0 = 0.1;
 
-  // exponential decay
+  // mu param for decay methods
   Real mu = 0.2;
+
+  // Armijio rule
+
+  // 0 < sigma < 0.5
+  Real sigma = 0.1;
+
 
 };
 

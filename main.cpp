@@ -62,12 +62,12 @@ Vector sum(const Vector & x1, const Vector & x2){
 };
 
 
-void print_result(Vector & res, int k, bool convergence){
-  std::cout << "number iterations" << k << std::endl;
+void print_result(Vector & x,const function_wrapper& f, int k, bool convergence){
+  std::cout << "number iterations: " << k << std::endl;
   std::cout << "argmin is equal to" << std::endl;
-  for(auto& i : res)
+  for(auto& i : x)
     std::cout << i << std::endl;
-
+  std::cout << "The function evaluated in that point is: " << f(x) << std::endl;
   return;
 }
 
@@ -75,34 +75,54 @@ void print_result(Vector & res, int k, bool convergence){
 // compute minimum
 
 Vector compute_minimum(const parameters& p, const function_wrapper& f, const gradient_wrapper& grad){
-    Real alpha = p.alpha_0;
-    Vector x_old = p.x0;
-    Vector x_new(x_old.size());
-    bool convergence = false;
-    int k = 0;
-    while (!convergence and k < p.max_iter){
-      Vector v = grad(x_old);
-      x_new = subtraction(x_old,scalar_vector(alpha, v));
+  Real alpha = p.alpha_0;
+  Vector x_old = p.x0;
+  Vector x_new(x_old.size());
+  bool convergence = false;
+  int k = 0;
+  while (!convergence and k < p.max_iter){
 
-      // update convergence
-      Real step = norm(subtraction(x_new,x_old));
-      Real residual = std::abs(f(x_new)-f(x_old));
-      convergence = step<p.eps_s or residual<p.eps_r;
+    // compute grad(x_k)
+    Vector grad_k = grad(x_old);
 
-      // update alpha
+    // find alpha
+    
+    // exponential decay
+    //alpha = p.alpha_0*std::exp(-p.mu*k);
+    
+    // Inverse Decay
+   // alpha = p.alpha_0 / ( 1 + p.mu * k );
+    
+    // Armijo rule
+    alpha = p.alpha_0;
+    bool armijio_condition = false;
+    while(!armijio_condition){
 
-      // exponential case
-      alpha = p.alpha_0*std::exp(-p.mu*k);
-
-      // updating n_iter
-      ++k;
-
-      // updating x_k
-      x_old = x_new;
-
+      armijio_condition = f(x_old) - f(subtraction(x_old, scalar_vector(alpha,grad_k) )) >= p.sigma*alpha*norm(grad_k)*norm(grad_k);
+      alpha /= 2;
     }
-    print_result(x_new,k,convergence);
-    return x_new;
+
+
+    // x_{k+1} = x_{k} - alpha_{k} * grad(f(x_{k}))
+    x_new = subtraction(x_old,scalar_vector(alpha, grad_k));
+
+
+    // update convergence
+    Real step = norm(subtraction(x_new,x_old));
+    Real residual = std::abs(f(x_new)-f(x_old));
+    convergence = step < p.eps_s or residual < p.eps_r;
+
+    
+    
+    // updating n_iter
+    ++k;
+
+    // updating x_k
+    x_old = x_new;
+
+  }
+  print_result(x_new,f,k,convergence);
+  return x_new;
 
 }
 
@@ -113,10 +133,12 @@ int main (){
     std::cout<<"hello world"<<std::endl;
     parameters p;
     Vector x = p.x0;
+
+    // create function we want to find a minimumm of and its gradient as wrappers
     function_wrapper f(function_);
     gradient_wrapper grad(gradient_);
 
     Vector min = compute_minimum(p,f,grad);
-    
+
     return 0;
 }
