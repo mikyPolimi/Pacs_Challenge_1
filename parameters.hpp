@@ -20,7 +20,7 @@ struct parameters{
 };
 
 
-Real function(const Vector & x){
+Real function_(const Vector & x){
   /** @brief Function to be minimized
    *  @param x: vector of variables
    *  @return value of the function
@@ -30,7 +30,7 @@ Real function(const Vector & x){
 }
 
 
-Vector gradient(const Vector & x){
+Vector gradient_(const Vector & x){
   /** @brief Gradient of the function to be minimized
    *  @param x: vector of variables
    *  @return gradient of the function

@@ -5,7 +5,7 @@
 struct function_wrapper{
     std::function<Real(const Vector&)> f;
     function_wrapper(std::function<Real(const Vector&)> fun): f(fun){};
-    Real operator()(const Vector& x){
+    Real operator()(const Vector& x) const{
         return f(x);
     }
 };
@@ -62,18 +62,47 @@ Vector sum(const Vector & x1, const Vector & x2){
 };
 
 
+void print_result(Vector & res, int k, bool convergence){
+  std::cout << "number iterations" << k << std::endl;
+  std::cout << "argmin is equal to" << std::endl;
+  for(auto& i : res)
+    std::cout << i << std::endl;
+
+  return;
+}
+
+
 // compute minimum
 
-Real compute_minimum(const parameters& p, const function_wrapper& f, const gradient_wrapper& grad){
+Vector compute_minimum(const parameters& p, const function_wrapper& f, const gradient_wrapper& grad){
     Real alpha = p.alpha_0;
     Vector x_old = p.x0;
     Vector x_new(x_old.size());
     bool convergence = false;
-    int n = 0;
-    while (!convergence and n < p.max_iter){
+    int k = 0;
+    while (!convergence and k < p.max_iter){
       Vector v = grad(x_old);
       x_new = subtraction(x_old,scalar_vector(alpha, v));
+
+      // update convergence
+      Real step = norm(subtraction(x_new,x_old));
+      Real residual = std::abs(f(x_new)-f(x_old));
+      convergence = step<p.eps_s or residual<p.eps_r;
+
+      // update alpha
+
+      // exponential case
+      alpha = p.alpha_0*std::exp(-p.mu*k);
+
+      // updating n_iter
+      ++k;
+
+      // updating x_k
+      x_old = x_new;
+
     }
+    print_result(x_new,k,convergence);
+    return x_new;
 
 }
 
@@ -82,6 +111,12 @@ Real compute_minimum(const parameters& p, const function_wrapper& f, const gradi
 int main (){
 
     std::cout<<"hello world"<<std::endl;
+    parameters p;
+    Vector x = p.x0;
+    function_wrapper f(function_);
+    gradient_wrapper grad(gradient_);
 
+    Vector min = compute_minimum(p,f,grad);
+    
     return 0;
 }
