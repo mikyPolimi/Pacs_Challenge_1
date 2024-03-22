@@ -4,15 +4,30 @@
 
 using Real = double;
 using Vector = std::vector<Real>;
+// Define an enumeration for different optimization methods
+enum class Method { Exponential, Inverse, Armijo };
+
+
+// selecting method of resolution:
+constexpr Method M = Method::Armijo;
+
+// selecting gradient computation:
+
+// 1 = exact solution
+// 0 = approximate solution
+constexpr int grad_mode = 1;
 
 struct parameters{
   int max_iter = 1000;
   Real eps_r = 1e-6;
   Real eps_s = 1e-6;
 
-    // initial values
-    Vector x0 = {0,0};
-    Real alpha_0 = 0.1;
+
+ 
+ // constexpr Method M = Method::Armijo;
+  // initial values
+  Vector x0 = {0,0};
+  Real alpha_0 = 0.1;
 
   // mu param for decay methods
   Real mu = 0.2;
