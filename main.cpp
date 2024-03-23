@@ -1,8 +1,6 @@
 #include <iostream>
 #include "compute_gradient.hpp"
 
-
-
 int main (){
 
     parameters p;
@@ -12,8 +10,7 @@ int main (){
     function_wrapper f(function_);
     gradient_wrapper grad(gradient_);
     // compute the argmin 
-    if constexpr (grad_mode == Grad::Exact);
-    Vector min = compute_minimum<grad_mode>(p,f,grad);
+    Vector min = compute_minimum(p,f,grad);
 
     return 0;
 }

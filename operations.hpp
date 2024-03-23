@@ -1,7 +1,7 @@
 #pragma once 
 
 #include "parameters.hpp"
-#include "wrappers.hpp"
+
 
 Real norm(const Vector& x){
     Real sum = 0;
@@ -44,16 +44,3 @@ Vector sum(const Vector & x1, const Vector & x2){
     y[i] = x1[i] + x2[i];
   return y;
 };
-
-
-Vector grad_approx(std::function<Real(const Vector&)> const f, const Vector& x,  Real h = 1e-6){
-      Vector grad(x.size());
-      for(size_t i = 0 ; i < x.size() ; ++i){
-        Vector x_next{x}, x_prev{x};
-        x_next[i] += h;
-        x_prev[i] -= h;
-        grad[i] = 0.5 * (f(x_next) - f(x_prev)) / h;
-      }
-    return grad;
-    }
-

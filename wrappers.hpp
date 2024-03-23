@@ -23,6 +23,3 @@ struct gradient_wrapper{
   }
 
 };
-
-
-struct approx_gradient_wrapper
