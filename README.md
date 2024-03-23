@@ -18,15 +18,21 @@ To use this project, follow these steps:
    $ git clone https://github.com/mikyPolimi/PACS_Challenge_1.git
    $ cd PACS_Challenge_1
 
-2. If you want to modify the default choices go in `parameter.hpp` and select:
+2. (**Only If you want to modify the default choices**)
+   
+     go in *parameter.hpp* and select:
 
 
   - Function to minimize
   - Method for computing $\alpha$ (Exponential, Inverse, Aramijo)
   - Parameters for selected method ( $\mu$ for Exponential and Inverse, $\sigma$ for Aramijo)
-  - Step length ($\varepsilon_s$)
-  - Residual ($\varepsilon_r$)
-  - Maximum number of iterations ($max \; iter$)
+  - Parameters for the arrest criteria:
+    - Step length ($\varepsilon_s$)
+    - Residual ($\varepsilon_r$)
+    - Maximum number of iterations ($max \; iter$)
+  - Initial values:
+    - $\alpha_0$ ( initial value of $\alpha$ ) 
+    - $x_0$ ( initial guess of $x$ ) 
 
 
 3. Run the code:

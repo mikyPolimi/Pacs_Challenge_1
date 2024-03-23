@@ -10,6 +10,7 @@ int main (){
     function_wrapper f(function_);
     gradient_wrapper grad(gradient_);
     // compute the argmin 
+    print_parameters(p);
     Vector min = compute_minimum(p,f,grad);
 
     return 0;

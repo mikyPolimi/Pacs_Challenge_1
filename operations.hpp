@@ -4,6 +4,7 @@
 
 
 Real norm(const Vector& x){
+  // compute the norm of a given vector
     Real sum = 0;
     for(const auto& i : x)
         sum += i*i;
@@ -12,20 +13,15 @@ Real norm(const Vector& x){
 };
 
 Vector scalar_vector( const Real alpha, Vector& x){
-  // Scalar * vector
-  // @param x: vector
-  //  @param alpha: scalar
+  // compute Scalar * vector
   Vector y(x);
   for(auto & i : y)
     i *= alpha;
   return y;
 }
+
 Vector subtraction(const Vector & x1, const Vector & x2){
-  /** @brief Subtraction of two vectors
-   *  @param x1: vector
-   *  @param x2: vector to subtract
-   *  @return subtraction of the two vectors
-   */
+  // compute the difference of the two vectors
   Vector y(x1.size());
   for(size_t i = 0; i < x1.size(); ++i)
     y[i] = x1[i] - x2[i];
@@ -34,11 +30,7 @@ Vector subtraction(const Vector & x1, const Vector & x2){
 }
 
 Vector sum(const Vector & x1, const Vector & x2){
-  /** @brief Sum of two vectors
-   *  @param x1: vector
-   *  @param x2: vector to subtract
-   *  @return element-wise sum of the two vectors
-   */
+// compute the sum of the two vectors
   Vector y(x1.size());
   for(size_t i = 0; i < x1.size(); ++i)
     y[i] = x1[i] + x2[i];

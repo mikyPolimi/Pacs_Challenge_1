@@ -2,13 +2,28 @@
 
 #include "wrappers.hpp"
 
-void print_result(Vector & x,const function_wrapper& f, int k, bool convergence){
-  std::cout << "number iterations: " << k << std::endl;
-  std::cout << "argmin is equal to" << std::endl;
-  for(auto& i : x)
-    std::cout << i << std::endl;
-  std::cout << "The function evaluated in that point is: " << f(x) << std::endl;
-  return;
+void print_result(Vector & x,const function_wrapper& f, bool convergence){
+  std::cout << std::endl;
+    for(int i = 0; i < 30; ++i)
+        std::cout << "/";
+    
+    std::cout << std::endl;
+  std::cout << std::endl;  
+  std::cout << "Compilation ended with these results:" << std::endl;
+  std::cout << "argmin is equal to:" << std::endl;
+    std::cout << "x_min =  {";
+        auto it = x.begin();
+        std::cout << *it;
+        ++it;
+        for (; it != x.end(); ++it)
+            std::cout << ", " << *it;
+    
+  std::cout << "}" << std::endl;
+  std::cout << "The function evaluated at that point is: f(x_min) = " << f(x) << std::endl;
+  if (convergence)
+        std::cout << "The algorithm converged." << std::endl;
+  else
+        std::cout << "The algorithm did not converge." << std::endl;
 }
 
 
@@ -80,7 +95,7 @@ Vector compute_minimum(const parameters& p, const function_wrapper& f, const gra
     x_old = x_new;
 
   }
-  print_result(x_new,f,k,convergence);
+  print_result(x_new,f,convergence);
   return x_new;
 
 }

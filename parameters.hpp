@@ -17,11 +17,6 @@ enum class Method { Exponential, Inverse, Armijo };
 // selecting method of resolution:
 constexpr Method M = Method::Armijo;
 
-// selecting gradient computation:
-enum class Grad { Exact, Approx };
-// 1 = exact solution
-// 0 = approximate solution
-constexpr Grad grad_mode = Grad::Approx;
 
 struct parameters{
   int max_iter = 1000;
@@ -47,24 +42,38 @@ struct parameters{
 };
 
 
-Real function_(const Vector & x){
-  /* @brief Function to be minimized
-   *  @param x: vector of variables
-   *  @return value of the function
-   */
 
+// Insert here the function you want to find the minimum of
+Real function_(const Vector & x){
   return x[0]*x[1] + 4*std::pow(x[0], 4) + std::pow(x[1], 2) + 3*x[0];
 }
 
-
+// and here its gradient
 Vector gradient_(const Vector & x){
-  /** @brief Gradient of the function to be minimized
-   *  @param x: vector of variables
-   *  @return gradient of the function
-   */
   Vector grad(x.size());
   grad[0] = x[1] + 16*std::pow(x[0], 3) + 3;
   grad[1] = x[0] + 2*x[1];
 
   return grad;
+}
+
+
+void print_parameters(const parameters &params) {
+  std::cout << std::endl;
+    std::cout << "These are the parameters selected:" << std::endl;
+    std::cout << "max_iter: " << params.max_iter << std::endl;
+    std::cout << "eps_r: " << params.eps_r << std::endl;
+    std::cout << "eps_s: " << params.eps_s << std::endl;
+    std::cout << "x0: {";
+    if (!params.x0.empty()) {
+        auto it = params.x0.begin();
+        std::cout << *it;
+        ++it;
+        for (; it != params.x0.end(); ++it)
+            std::cout << ", " << *it;
+    }
+    std::cout << "}" << std::endl;
+    std::cout << "alpha_0: " << params.alpha_0 << std::endl;
+    std::cout << "mu: " << params.mu << std::endl;
+    std::cout << "sigma: " << params.sigma << std::endl;
 }
