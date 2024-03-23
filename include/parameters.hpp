@@ -18,10 +18,10 @@ enum class Method { Exponential, Inverse, Armijo };
 constexpr Method M = Method::Armijo;
 
 // selecting gradient computation:
-
+enum class Grad { Exact, Approx };
 // 1 = exact solution
 // 0 = approximate solution
-constexpr int grad_mode = 1;
+constexpr Grad grad_mode = Grad::Approx;
 
 struct parameters{
   int max_iter = 1000;

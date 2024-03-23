@@ -11,9 +11,9 @@ int main (){
     // create function_wrapper giving the value of function_ defined in parameters, that is the function we want to find the minimum
     function_wrapper f(function_);
     gradient_wrapper grad(gradient_);
-
     // compute the argmin 
-    Vector min = compute_minimum(p,f,grad);
+    if constexpr (grad_mode == Grad::Exact);
+    Vector min = compute_minimum<grad_mode>(p,f,grad);
 
     return 0;
 }

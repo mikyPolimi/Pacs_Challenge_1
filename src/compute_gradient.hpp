@@ -1,6 +1,6 @@
 #pragma once
 
-#include "wrappers.hpp"
+#include "../include/wrappers.hpp"
 
 void print_result(Vector & x,const function_wrapper& f, int k, bool convergence){
   std::cout << "number iterations: " << k << std::endl;
@@ -40,8 +40,41 @@ Real compute_alpha(const parameters& p, const function_wrapper& f, const Vector&
 }
 
 
+
+
+// in un caso G è un gradient_wrapper 
+// nell'altro è un vettore 
+template <typename G>
+Vector compute_minimum(const parameters& p, const function_wrapper& f){
+   Real alpha = p.alpha_0;
+  Vector x_old = p.x0;
+  Vector x_new(x_old.size());
+  bool convergence = false;
+  int k = 0;
+  while (!convergence and k < p.max_iter){
+    // compute grad(x_k)
+    Vector grad_k = G(x_old);
+
+    //
+    Vector grad_k = grad_approx(f,x_old)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // compute minimum
-//template <Method M>
+template <Grad grad_mode>
 Vector compute_minimum(const parameters& p, const function_wrapper& f, const gradient_wrapper& grad){
   Real alpha = p.alpha_0;
   Vector x_old = p.x0;
@@ -49,18 +82,21 @@ Vector compute_minimum(const parameters& p, const function_wrapper& f, const gra
   bool convergence = false;
   int k = 0;
   while (!convergence and k < p.max_iter){
-
     // compute grad(x_k)
-    Vector grad_k = grad(x_old);
+    Vector grad_k(x_old.size());
+    if constexpr (grad_mode == Grad::Exact)
+      Vector grad_k = grad(x_old);
+    else // ( grad_mode == Grad::Approx)
+    {
+      Vector grad_k = grad_approx(f,x_old);
+      std::cout << grad_k[0] << grad_k[1] << std::endl;
+     }
+    //else
+      //std::cerr << "grad mode not valid" << std::endl;
 
     // find alpha
-    
-   alpha = compute_alpha<M>(p,f,x_old,grad_k, k);
-    
-   
-    /*
-  
-*/
+    alpha = compute_alpha<M>(p,f,x_old,grad_k, k);
+
 
     // x_{k+1} = x_{k} - alpha_{k} * grad(f(x_{k}))
     x_new = subtraction(x_old,scalar_vector(alpha, grad_k));
