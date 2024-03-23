@@ -1,9 +1,15 @@
+#pragma once
+
+
+
 #include <vector>
 #include <cmath>
 #include <functional>
 
 using Real = double;
 using Vector = std::vector<Real>;
+
+
 // Define an enumeration for different optimization methods
 enum class Method { Exponential, Inverse, Armijo };
 
