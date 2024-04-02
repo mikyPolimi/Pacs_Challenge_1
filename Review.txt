@@ -1,0 +1,11 @@
+README is good.
+
+
+Code:
+  why instead of having a method called subtraction you didn't overload an operator-?
+  why instead of having a method called sum you didn't overload an operator+?
+  why instead of having a method called scalar_vector you didn't overload an operator*?
+
+  why you have a #pragma directives around your code?
+
+You didn't use getpot, nor muparser, nor json.
